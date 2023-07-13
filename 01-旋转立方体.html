@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>旋转立方体</title>
+    <style>
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./node_modules/three/build/three.module.js"
+      }
+    }
+  </script>
+
+  <body>
+    <div></div>
+    <script type="module">
+      import * as THREE from "three";
+      console.log(THREE);
+      //场景
+      const scene = new THREE.Scene();
+      // 相机PerspectiveCamera()（透摄）
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      const renderer = new THREE.WebGLRenderer();
+      // 渲染器 setSize:设置渲染器输出窗口的尺寸
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      //appendChild方法将渲染器的domElement属性添加到document.body中，这样渲染结果就会显示在浏览器中。
+      document.body.appendChild(renderer.domElement);
+      // 几何体(BoxGeometry)对象
+      const geometry = new THREE.BoxGeometry(1, 1, 1);
+      // 基本材质(MeshBasicMaterial)对象
+      const loader = new THREE.TextureLoader();
+      const material = new THREE.MeshBasicMaterial({
+        map: loader.load("./images/纹理.png"),
+      });
+      //网格(Mesh)对象
+      const cube = new THREE.Mesh(geometry, material);
+      scene.add(cube);
+      camera.position.z = 3;
+      function animate() {
+        // 使用requestAnimationFrame方法来循环调用渲染函数，以便场景中的3D对象能够在每一帧之间进行更新和渲染。
+        requestAnimationFrame(animate);
+        cube.rotation.x += 0.001;
+        cube.rotation.y += 0.001;
+        //在animate函数中，我们调用了渲染器的render方法，传入了场景和摄像机作为参数，这样渲染器就会渲染场景，并根据摄像机的位置和参数决定最终的渲染结果。
+        renderer.render(scene, camera);
+      }
+      animate();
+    </script>
+  </body>
+</html>
